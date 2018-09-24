@@ -22,7 +22,7 @@ Todos os endpoints estão englobados com `/api/v1`. Exemplo: `localhost:8000/api
 | ----------- | -------------- | --------------------------------------- |
 | GET         | /schedule      | Lista todos os agendamentos             |
 | GET         | /schedule/{id} | Retorna os detalhes do agendamento {id} |
-| POST        | /schedule      | Insere no um agendamento                |
+| POST        | /schedule      | Insere um agendamento                   |
 | PUT         | /schedule/{id} | Edita o agendamento {id}                |
 | DELETE      | /schedule/{id} | Remove o agendamento {id}               |
 
