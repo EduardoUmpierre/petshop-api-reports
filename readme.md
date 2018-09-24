@@ -29,7 +29,7 @@ Todos os endpoints estão englobados com `/api/v1`. Exemplo: `localhost:8000/api
 ### Campos obrigatórios (POST e PUT)
 
 - ID do usuário
-- Data: DateTime no formato (YYYY-mm-dd)
+- Data: DateTime no formato (yyyy-MM-dd HH:mm:ss)
 
 Exemplo:
 
