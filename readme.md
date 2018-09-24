@@ -7,16 +7,16 @@ A API está disponível na seguinte URL: https://petshop-api.herokuapp.com/api/v
 
 ## Como rodar em desenvolvimento
 
-- Clonar o repositório
-- Executar `composer install` para instalar as dependências
-- Executar `php artisan migrate` para rodar as migrações do banco
-- Executar `php artisan db:seed` para criar os registros fake
-- Executar `php -S localhost:8000 -t public` para rodar o servidor local
-- Abrir no navegador `localhost:8000/`
+- Clonar o repositório.
+- Executar `composer install` para instalar as dependências.
+- Executar `php artisan migrate` para rodar as migrações do banco.
+- Executar `php artisan db:seed` para criar os registros fake.
+- Executar `php -S localhost:8000 -t public` para rodar o servidor local.
+- Abrir no navegador http://localhost:8000 ou o endereço que o console indicar.
 
 ## Endpoints
 
-Todos os endpoints estão englobados com `/api/v1/`. Exemplo: `localhost:8000/api/v1/`.
+Todos os endpoints estão englobados com `/api/v1`. Exemplo: `localhost:8000/api/v1`.
 
 | Método HTTP | Rota           | Descrição                               |
 | ----------- | -------------- | --------------------------------------- |
