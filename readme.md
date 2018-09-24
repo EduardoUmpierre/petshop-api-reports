@@ -1,21 +1,41 @@
-# Lumen PHP Framework
+# Serviço de agendamento
+API RESTful de serviço de agendamento para uma petshop. Projeto desenvolvido para a cadeira de Desenvolvimento de Componentes e Serviços da Faculdade SENAC RS.
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+## Heroku
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+A API está disponível na seguinte URL: https://petshop-api.herokuapp.com/api/v1/schedule
 
-## Official Documentation
+## Como rodar em desenvolvimento
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+- Clonar o repositório
+- Executar `composer install` para instalar as dependências
+- Executar `php artisan migrate` para rodar as migrações do banco
+- Executar `php artisan db:seed` para criar os registros fake
+- Executar `php -S localhost:8000 -t public` para rodar o servidor local
+- Abrir no navegador `localhost:8000/`
 
-## Security Vulnerabilities
+## Endpoints
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Todos os endpoints estão englobados com `/api/v1/`. Exemplo: `localhost:8000/api/v1/`.
 
-## License
+| Método HTTP | Rota           | Descrição                               |
+| ----------- | -------------- | --------------------------------------- |
+| GET         | /schedule      | Lista todos os agendamentos             |
+| GET         | /schedule/{id} | Retorna os detalhes do agendamento {id} |
+| POST        | /schedule      | Insere no um agendamento                |
+| PUT         | /schedule/{id} | Edita o agendamento {id}                |
+| DELETE      | /schedule/{id} | Remove o agendamento {id}               |
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+### Campos obrigatórios (POST e PUT)
+
+- ID do usuário
+- Data: DateTime no formato (YYYY-mm-dd)
+
+Exemplo:
+
+```
+{
+  "users_id": 1,
+  "date": "2018-09-12 12:00:00" 
+}
+```
