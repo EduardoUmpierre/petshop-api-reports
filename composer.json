@@ -33,8 +33,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-install-cmd": [
-            "chmod -R 777 storage",
-            "php artisan passport:keys"
+            "chmod -R 777 storage"
         ]
     },
     "config": {
