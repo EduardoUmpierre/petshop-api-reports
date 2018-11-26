@@ -24,4 +24,16 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->put('/{id}', 'ScheduleController@update');
         $router->delete('/{id}', 'ScheduleController@delete');
     });
+
+    $router->group(['prefix' => 'order'], function () use ($router) {
+        $router->group(['prefix' => 'report'], function () use ($router) {
+            $router->get('/', 'OrderReportController@getGeneralReport');
+            $router->get('/customer/{id}', 'OrderReportController@getGeneralReport');
+            $router->get('/product/{id}', 'OrderReportController@getGeneralReport');
+        });
+
+        $router->get('/{id}', 'OrderController@getOne');
+        $router->post('/', 'OrderController@create');
+        $router->put('/{id}/status', 'OrderController@updateStatus');
+    });
 });
