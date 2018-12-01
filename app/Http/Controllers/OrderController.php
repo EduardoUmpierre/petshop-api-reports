@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\OrderRepository;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,7 +32,8 @@ class OrderController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function create(Request $request): JsonResponse
     {
@@ -50,6 +50,7 @@ class OrderController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function updateStatus(Request $request, int $id): JsonResponse
     {
@@ -57,7 +58,7 @@ class OrderController extends Controller
             'status' => 'required|string'
         ]);
 
-        return response()->json($this->orderRepository->updateStatus($request->all(), $id));
+        return response()->json($this->orderRepository->updateStatus($id, $request->get('status')));
     }
 }
 

@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Order;
-use App\Repositories\OrderProductsRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +13,7 @@ class OrderRepository
     /**
      * @param OrderProductsRepository $opr
      */
-    public function __construct(OrderProductsRepository $opr) 
+    public function __construct(OrderProductsRepository $opr)
     {
         $this->orderProductsRepository = $opr;
     }
@@ -41,16 +40,38 @@ class OrderRepository
     }
 
     /**
-     * @param array $params
      * @param int $id
-     * @return Collection|Model
+     * @param string $status
+     * @return Model
      */
-    public function updateStatus(int $id, int $status): Model
+    public function updateStatus(int $id, string $status): Model
     {
         $product = Order::query()->findOrFail($id);
         $product->status = $status;
         $product->update();
 
         return $product;
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     * @return Collection
+     */
+    public function getCustomerReport(int $id, array $params): Collection
+    {
+        $query = Order::query()->with('products')->where('id', '=', $id);
+
+        if (count($params) > 0) {
+            if (isset($params['beginDate'])) {
+                $query->whereDate('created_at', '>=', $params['beginDate']);
+            }
+
+            if (isset($params['endDate'])) {
+                $query->whereDate('created_at', '<=', $params['endDate']);
+            }
+        }
+
+        return $query->get();
     }
 }

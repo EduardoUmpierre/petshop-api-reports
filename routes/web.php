@@ -26,14 +26,14 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'order'], function () use ($router) {
-        $router->group(['prefix' => 'report'], function () use ($router) {
-            $router->get('/', 'OrderReportController@getGeneralReport');
-            $router->get('/customer/{id}', 'OrderReportController@getGeneralReport');
-            $router->get('/product/{id}', 'OrderReportController@getGeneralReport');
-        });
-
         $router->get('/{id}', 'OrderController@getOne');
         $router->post('/', 'OrderController@create');
         $router->put('/{id}/status', 'OrderController@updateStatus');
+    });
+
+    $router->group(['prefix' => 'report'], function () use ($router) {
+        $router->get('/', 'ReportController@getGeneralReport');
+        $router->get('/customer/{id}', 'ReportController@getCustomerReport');
+        $router->get('/product/{id}', 'ReportController@getProductReport');
     });
 });

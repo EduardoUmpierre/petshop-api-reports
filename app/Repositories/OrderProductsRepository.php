@@ -7,7 +7,8 @@ use App\Product;
 class OrderProductsRepository
 {
     /**
-     * @param array $params
+     * @param array $products
+     * @param int $orderId
      */
     public function create(array $products, int $orderId)
     {
