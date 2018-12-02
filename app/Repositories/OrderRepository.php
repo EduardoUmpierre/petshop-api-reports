@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Order;
-use Illuminate\Database\Eloquent\Collection;
+use App\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderRepository
@@ -20,11 +20,17 @@ class OrderRepository
 
     /**
      * @param int $id
+     * @param bool $withProducts
+     * @param array $fields
      * @return Model
      */
-    public function findOneById(int $id): Model
+    public function findOneById(int $id, bool $withProducts = true, array $fields = ['*']): Model
     {
-        return Order::query()->with('products')->findOrFail($id);
+        if (!$withProducts) {
+            return Order::query()->findOrFail($id, $fields);
+        }
+
+        return Order::query()->with('products')->findOrFail($id, $fields);
     }
 
     /**
@@ -56,10 +62,11 @@ class OrderRepository
     /**
      * @param int $id
      * @param array $params
-     * @return Collection
+     * @return array
      */
-    public function getCustomerReport(int $id, array $params): Collection
+    public function getCustomerReport(int $id, array $params): array
     {
+        $response = [];
         $query = Order::query()->with('products')->where('id', '=', $id);
 
         if (count($params) > 0) {
@@ -72,6 +79,52 @@ class OrderRepository
             }
         }
 
-        return $query->get();
+        $orders = $query->get();
+        $response['orders'] = $orders;
+        $response['total'] = count($orders);
+
+        return $response;
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     * @return array
+     */
+    public function getProductReport(int $id, array $params): array
+    {
+        $response = [];
+        $orders = [];
+        $total = 0;
+
+        $query = Product::query()->where('product_id', '=', $id);
+
+        if (count($params) > 0) {
+            if (isset($params['beginDate'])) {
+                $query->whereDate('created_at', '>=', $params['beginDate']);
+            }
+
+            if (isset($params['endDate'])) {
+                $query->whereDate('created_at', '<=', $params['endDate']);
+            }
+        }
+
+        $products = $query->get();
+
+        foreach ($products as $key => $val) {
+            $total += $val['quantity'];
+
+            if (!isset($orders[$val['order_id']])) {
+                $orders[$val['order_id']] = $this->findOneById($val['order_id'],false);
+                $orders[$val['order_id']]['quantity'] = $val['quantity'];
+            } else {
+                $orders[$val['order_id']]['quantity'] += $val['quantity'];
+            }
+        }
+
+        $response['total'] = $total;
+        $response['orders'] = array_values($orders);
+
+        return $response;
     }
 }

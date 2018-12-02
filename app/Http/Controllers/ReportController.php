@@ -23,13 +23,20 @@ class ReportController extends Controller
     {
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
     public function getCustomerReport(Request $request, int $id): JsonResponse
     {
         return response()->json($this->orderRepository->getCustomerReport($id, $this->getQueryParams($request->getQueryString())));
     }
 
-    public function getProductReport(int $id): JsonResponse
+
+    public function getProductReport(Request $request, int $id): JsonResponse
     {
+        return response()->json($this->orderRepository->getProductReport($id, $this->getQueryParams($request->getQueryString())));
     }
 
     /**
