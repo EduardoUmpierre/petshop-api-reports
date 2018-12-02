@@ -19,10 +19,6 @@ class ReportController extends Controller
         $this->orderRepository = $sr;
     }
 
-    public function getGeneralReport(): JsonResponse
-    {
-    }
-
     /**
      * @param Request $request
      * @param int $id

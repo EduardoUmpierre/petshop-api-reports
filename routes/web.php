@@ -32,7 +32,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'report'], function () use ($router) {
-        $router->get('/', 'ReportController@getGeneralReport');
         $router->get('/customer/{id}', 'ReportController@getCustomerReport');
         $router->get('/product/{id}', 'ReportController@getProductReport');
     });
