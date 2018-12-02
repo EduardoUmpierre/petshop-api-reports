@@ -186,7 +186,7 @@ class OrderRepository
         ];
 
         foreach ($products as $key => $val) {
-            $mockItem = isset($mock[$val['id']]) ? $mock[$val['id']] : $mock[0];
+            $mockItem = isset($mock[$val['id']]) ? $mock[$val['id']] : $mock[1];
 
             $products[$key]['name'] = $mockItem['name'];
             $products[$key]['unit_price'] = $mockItem['unit_price'];
@@ -216,7 +216,7 @@ class OrderRepository
 
         return [
             'id' => $id,
-            'name' => isset($mock[$id]) ? $mock[$id] : $mock[0]
+            'name' => isset($mock[$id]) ? $mock[$id] : $mock[1]
         ];
     }
 }
