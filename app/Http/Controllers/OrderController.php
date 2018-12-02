@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\OrderRepository;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,11 +22,11 @@ class OrderController extends Controller
 
     /**
      * @param int $id
-     * @return Model
+     * @return JsonResponse
      */
-    public function getOne(int $id): Model
+    public function getOne(int $id): JsonResponse
     {
-        return $this->orderRepository->findOneById($id);
+        return response()->json($this->orderRepository->findOneByIdWithMock($id));
     }
 
     /**

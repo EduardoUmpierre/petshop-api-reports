@@ -34,6 +34,19 @@ class OrderRepository
     }
 
     /**
+     * @param int $id
+     * @return array
+     */
+    public function findOneByIdWithMock(int $id): array {
+        $order = $this->findOneById($id)->toArray();
+        $order['products'] = $this->getProductMock($order['products']);
+        $order['user'] = $this->getUserMock($order['user_id']);
+        unset($order['user_id']);
+
+        return $order;
+    }
+
+    /**
      * @param array $params
      * @return $this|Model
      */
@@ -67,7 +80,7 @@ class OrderRepository
     public function getCustomerReport(int $id, array $params): array
     {
         $response = [];
-        $query = Order::query()->with('products')->where('id', '=', $id);
+        $query = Order::query()->select('id')->where('user_id', '=', $id);
 
         if (count($params) > 0) {
             if (isset($params['beginDate'])) {
@@ -79,7 +92,12 @@ class OrderRepository
             }
         }
 
-        $orders = $query->get();
+        $orders = $query->get()->toArray();
+
+        foreach ($orders as $key => $val) {
+            $orders[$key] = $this->findOneByIdWithMock($val['id']);
+        }
+
         $response['orders'] = $orders;
         $response['total'] = count($orders);
 
@@ -115,8 +133,10 @@ class OrderRepository
             $total += $val['quantity'];
 
             if (!isset($orders[$val['order_id']])) {
-                $orders[$val['order_id']] = $this->findOneById($val['order_id'],false);
+                $orders[$val['order_id']] = $this->findOneById($val['order_id'], false);
+                $orders[$val['order_id']]['user'] = $this->getUserMock($orders[$val['order_id']]['user_id']);
                 $orders[$val['order_id']]['quantity'] = $val['quantity'];
+                unset($orders[$val['order_id']]['user_id']);
             } else {
                 $orders[$val['order_id']]['quantity'] += $val['quantity'];
             }
@@ -126,5 +146,77 @@ class OrderRepository
         $response['orders'] = array_values($orders);
 
         return $response;
+    }
+
+    /**
+     * @param array $products
+     * @return array
+     */
+    public function getProductMock(array $products): array
+    {
+        $mock = [
+            1 => [
+                'name' => 'Brinquedo para cachorro',
+                'unit_price' => '10.50'
+            ],
+            2 => [
+                'name' => 'Ração para cachorro',
+                'unit_price' => '40.50'
+            ],
+            3 => [
+                'name' => 'Aquário 50l',
+                'unit_price' => '100'
+            ],
+            4 => [
+                'name' => 'Ração para gato',
+                'unit_price' => '12.45'
+            ],
+            5 => [
+                'name' => 'Coleira para cachorro',
+                'unit_price' => '10.50'
+            ],
+            6 => [
+                'name' => 'Roda para hamster',
+                'unit_price' => '10'
+            ],
+            7 => [
+                'name' => 'Gaiola para pássaros',
+                'unit_price' => '25'
+            ],
+        ];
+
+        foreach ($products as $key => $val) {
+            $mockItem = isset($mock[$val['id']]) ? $mock[$val['id']] : $mock[0];
+
+            $products[$key]['name'] = $mockItem['name'];
+            $products[$key]['unit_price'] = $mockItem['unit_price'];
+            $products[$key]['id'] = $products[$key]['product_id'];
+            unset($products[$key]['product_id']);
+        }
+
+        return $products;
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getUserMock(int $id): array
+    {
+        $mock = [
+            1 => 'Elias',
+            2 => 'Eduardo',
+            3 => 'Neon',
+            4 => 'Ingrid',
+            5 => 'Felipe',
+            6 => 'Walter',
+            7 => 'Ana',
+            8 => 'Vivian'
+        ];
+
+        return [
+            'id' => $id,
+            'name' => isset($mock[$id]) ? $mock[$id] : $mock[0]
+        ];
     }
 }
