@@ -17,20 +17,6 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
-    $router->group(['prefix' => 'schedule'], function () use ($router) {
-        $router->get('/', 'ScheduleController@getAll');
-        $router->get('/{id}', 'ScheduleController@getOne');
-        $router->post('/', 'ScheduleController@create');
-        $router->put('/{id}', 'ScheduleController@update');
-        $router->delete('/{id}', 'ScheduleController@delete');
-    });
-
-    $router->group(['prefix' => 'order'], function () use ($router) {
-        $router->get('/{id}', 'OrderController@getOne');
-        $router->post('/', 'OrderController@create');
-        $router->put('/{id}/status', 'OrderController@updateStatus');
-    });
-
     $router->group(['prefix' => 'report'], function () use ($router) {
         $router->get('/customer/{id}', 'ReportController@getCustomerReport');
         $router->get('/product/{id}', 'ReportController@getProductReport');
